@@ -1,54 +1,131 @@
 #include <bangtal.h>
+#define _CRT_OBSOLETE_NO_WARNINGS 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
 
 SceneID scene1, scene0;
-ObjectID piece[7], problem, start, cake[7];
+ObjectID piece[7], problem, start, cake[7], end, next, restart, finish;
 TimerID timer1;
+
+int n, u1, u2, u3, u4, u5, u6, u7;
+int flag = 0;
+
+void endGame(bool success) {
+	if (success) {
+		showMessage("꼴찌 축하");
+		showObject(end);
+
+	}
+	else {
+		showMessage("몇 등??");
+		showObject(end);
+	}
+
+	stopTimer(timer1);
+}
+
+
+void startGame() {
+	srand(time(NULL));
+	
+	for (n = 0; n < 1; n++) {
+		u1 = (rand() % 6)+1;
+		u2 = (rand() % 6) + 1;
+		u3 = (rand() % 6) + 1;
+		u4 = (rand() % 6) + 1;
+		u5 = (rand() % 6) + 1;
+		u6 = (rand() % 6) + 1;
+		u7 = (rand() % 6) + 1;
+		
+	}
+	hideObject(next);
+	hideObject(end);
+	hideObject(restart);
+	setTimer(timer1, 20.0f);
+	startTimer(timer1);
+}
+
+
+
+void timerCallback(TimerID timer) {
+	if (timer == timer1) {
+		endGame(true);
+
+	}
+
+}
+
+
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 	if (object == start) {
 		enterScene(scene1);
-	}
-	srand(time(NULL));
-	int n, u1, u2, u3, u4, u5, u6, u7;
-	for (n = 0; n < 1; n++) {
-		u1 = rand() % 7;
-		u2 = rand() % 7;
-		u3 = rand() % 7;
-		u4 = rand() % 7;
-		u5 = rand() % 7;
-		u6 = rand() % 7;
-		u7 = rand() % 7;
-		if (u1 == u2 || u1 == u3 || u1 == u4 || u1 == u5 || u1 == u6 || u1 == u7 || u2 == u3 || u2 == u4 || u2 == u5 || u2 == u6 || u2 == u7
-			|| u3 == u4 || u3 == u5 || u3 == u6 || u3 == u7 || u4 == u5 || u4 == u6 || u4 == u7 || u5 == u6 || u5 == u7 || u6 == u7) {
-			n--;
-		}
+		showMessage("화살표를 누르고 시작하세요");
 	}
 
-	if (object==cake[u1]) {
-		hideObject(piece[u1]);
-		if (object == cake[u2]) {
-			hideObject(piece[u2]);
-			if (object == cake[u3]) {
-				hideObject(piece[u3]); 
-				if(object == cake[u4]){
-					hideObject(piece[u4]);
-					if (object == cake[u5]) {
-						hideObject(piece[u5]);
-						if (object == cake[u6]) {
-							hideObject(piece[u6]);
-							if (object == cake[u7]) {
-								hideObject(piece[u7]);
-							}
-						}
-					}
-				}
-			}
-		}	
+	else if (object == next) {
+		startGame();
+		
 	}
+	else if (object == end) {
+		endGame();
+	}
+	else if (object == finish) {
+		endGame(false);
+	}
+
+	if (object == cake[u1]) {
+		hideObject(piece[u1]);
+		u1 = u2;
+		hideObject(piece[u2]);
+		u2 = u3;
+		hideObject(piece[u3]);
+		u3 = u4;
+		hideObject(piece[u4]);
+		u4 = u5;
+		hideObject(piece[u5]);
+		u5 = u6;
+		hideObject(piece[u6]);
+		u6 = u7;
+		hideObject(piece[u7]);
+	}
+	else if (object == cake[0]) {
+		hideObject(piece[0]);
+		_sleep(2000);
+	}
+	else if (object == cake[1]) {
+		hideObject(piece[1]);
+		_sleep(2000);
+	}
+	else if (object == cake[2]) {
+		hideObject(piece[2]);
+		_sleep(2000);
+	}
+	else if (object == cake[3]) {
+		hideObject(piece[3]);
+		_sleep(2000);
+	}
+	else if (object == cake[4]) {
+		hideObject(piece[4]);
+		_sleep(2000);
+	}
+	else if (object == cake[5]) {
+		hideObject(piece[5]);
+		_sleep(2000);
+	}
+	else if (object == cake[6]) {
+		hideObject(piece[6]);
+		_sleep(2000);
+	}
+
+
+	
+
+	
+
+
 	
 }
 
@@ -56,10 +133,12 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 
 
 
+
 int main() {
-	int a, i1, j1, k1, i2, j2, k2, i3, j3, k3;
+	int a, i1, j1, k1, i2, j2, k2, i3;
 	int a1 = 55, a2 = 99, b1 = 265, b2 = 319, c1 = 475, c2 = 529;
 	
+
 
 	srand(time(NULL));
 	for (a = 0; a < 1; a++) {
@@ -71,8 +150,10 @@ int main() {
 		j2 = rand() % 7;
 		k2 = rand() % 7;
 		i3 = rand() % 7;
-		j3 = rand() % 7;
-		k3 = rand() % 7;
+		if (i1 == i2 || i1 == i3 || i1 == j1 || i1 == j2 || i1 == k1 || i1 == k2 || i2 == j1 || i2 == j2 || i2 == k1 || i2 == k2 || i2 == i3
+			|| i3 == j1 || i3 == j2 || i3 == k1 || i3 == k2 || j1 == j2 || j1 == k1 || j1 == k2 || j2 == k1 || j2 == k2 || k1 == k2) {
+			a--;
+		}
 	
 	}
 
@@ -103,20 +184,9 @@ int main() {
 		l5 = rand() % (o2 + 1 - o1) + o1;
 		l6 = rand() % (o2 + 1 - o1) + o1;
 		l7 = rand() % (o2 + 1 - o1) + o1;
-		l8 = rand() % (o2 + 1 - o1) + o1;
-		l9 = rand() % (o2 + 1 - o1) + o1;
+		
 	
 	}
-
-
-
-	printf("%d", t1);
-	printf("\n");
-	printf("%d", t2);
-	printf("\n");
-	printf("%d", t3);
-	printf("\n");
-
 
 
 	scene0 = createScene("gogo", "배경.png");
@@ -172,11 +242,7 @@ int main() {
 	locateObject(piece[i3], scene1, t1, l7);
 	showObject(piece[i3]);
 
-	locateObject(piece[j3], scene1, t2, l8);
-	showObject(piece[j3]);
 
-	locateObject(piece[k3], scene1, t3, l9);
-	showObject(piece[k3]);
 
 	cake[0] = createObject("ㄱ.png");
 	scaleObject(cake[0], 0.63f);
@@ -222,6 +288,27 @@ int main() {
 	showObject(cake[6]);
 
 
+	end = createObject("end.png");
+	locateObject(end, scene1, 550, 100);
+	showObject(end);
+
+	next = createObject("play.png");
+	locateObject(next, scene1, 565, 150);
+	showObject(next);
+
+	finish = createObject("finish.png");
+	locateObject(finish, scene1, 1050, 600);
+	showObject(finish);
+	scaleObject(finish, 0.3f);
+
+
+
+	timer1 = createTimer(20.0f);
+	showTimer(timer1);
+
+
+
+
 	setMouseCallback(mouseCallback);
-	startGame(scene1);
+	startGame(scene0);
 }
